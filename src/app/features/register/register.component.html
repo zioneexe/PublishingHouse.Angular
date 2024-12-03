@@ -1,0 +1,67 @@
+<div class="content">
+  <form [formGroup]="form" class="register-form" (ngSubmit)="onSubmit()">
+    <span class="heading">Sign Up</span> 
+    <div class="login-link">
+      <p>Already have an account? <a routerLink="/login">Login</a></p>
+    </div>
+    <div class="controls">
+      <div class="form-control">
+        <div class="input">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          </svg>           
+          <input type="text" formControlName="username" placeholder="username..">
+        </div>
+        @if (form.controls['username'].invalid && 
+          (form.controls['username'].touched || form.controls['username'].dirty)
+        ) {
+          @if (form.controls['username'].errors?.['required']) {
+            <small>Username is required!</small>
+          }
+        }
+      </div>
+      <div class="form-control">
+        <div class="input">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+          </svg>  
+          <input type="email" formControlName="email"  placeholder="e-mail..">
+        </div>
+        @if (form.controls['email'].invalid && 
+          (form.controls['email'].touched || form.controls['email'].dirty)
+        ) {
+          @if (form.controls['email'].errors?.['required']) {
+            <small>E-mail is required!</small>
+          }
+          @if (form.controls['email'].errors?.['email']) {
+            <small>Incorrect format (try email&#64;mail.com)!</small>
+          }
+        }
+      </div>
+      <div class="form-control">
+        <div class="input">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+          </svg>      
+          <input type="password" formControlName="password" placeholder="password..">
+        </div>
+        @if (form.controls['password'].invalid && 
+          (form.controls['password'].touched || form.controls['password'].dirty)
+        ) {
+          @if (form.controls['password'].errors?.['required']) {
+            <small>Password is required!</small>
+          }
+          @if (form.controls['password'].errors?.['minlength']) {
+            <small>Minimum length - 8!</small>
+          }
+        }
+      </div>
+    </div>
+    <button type="submit" class="button-18">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+  </form>
+  <aside class="picture"></aside>
+</div>

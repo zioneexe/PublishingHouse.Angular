@@ -1,0 +1,25 @@
+<div class="todo">
+  <div class="top">
+    <h1 class="label">What to do?</h1>
+    <div class="new-task">
+      <input type="text" maxlength="255" placeholder="Task name..." (keydown.enter)="addTask(newTaskTitle)" [(ngModel)]="newTaskTitle">
+      <button class="button-18" (click)="addTask(newTaskTitle)">Add new task</button>
+    </div>
+  </div>
+  
+  <hr class="hr">
+
+  @if (isEditing) {
+    <form (ngSubmit)="renameTask()" class="rename-form" [formGroup]="renameForm">
+      <input type="text" maxlength="255" formControlName="renamedTitle" placeholder="new task name..." (keydown.enter)="renameTask()">
+      <button class="button-18" type="submit">Save</button>
+      <button class="button-18" type="button" (click)="cancelEditing()">Cancel</button>
+    </form>
+  }
+
+  <div class="list">
+    @for (order of orders; track order.id) {
+      <app-task [id]="task.id" [title]="task.title" [isDone]="task.isDone" (rename)="startEditing($event)" (delete)="deleteTask($event)"/>
+    }
+  </div>
+</div>

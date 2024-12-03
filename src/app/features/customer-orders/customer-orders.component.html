@@ -1,0 +1,41 @@
+<div class="customer-orders">
+  <div class="container">
+    <div class="header-actions">
+      <button class="pay-btn" routerLink="/payment">Pay for Orders</button>
+    </div>
+    
+    <section>
+      <h2>Awaiting Confirmation</h2>
+      <div *appShowIfNotEmpty="awaitingOrders; else noAwaitingOrders">
+        <ul>
+          <li *ngFor="let order of awaitingOrders">
+            <strong>{{ order.bookName }}</strong>
+            <span>{{ order.dateRange || 'No dates specified' }}</span>
+            <span>{{ order.status }}</span>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noAwaitingOrders>
+        <p>No orders awaiting confirmation.</p>
+      </ng-template>
+    </section>
+    <section>
+      <h2>My Orders</h2>
+      <div *appShowIfNotEmpty="myOrders; else noMyOrders">
+        <ul>
+          <li *ngFor="let order of myOrders">
+            <strong>{{ order.bookName }}</strong>
+            <span>{{ order.dateRange || 'No dates specified' }}</span>
+            <span>{{ order.status }}</span>
+            <button class="delete-btn" (click)="onDeleteOrder(order.id)">Delete</button>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noMyOrders>
+        <p>No orders found.</p>
+      </ng-template>
+    </section>
+    <button class="add-order" (click)="addOrder()">Order Print</button>
+  </div>
+  <app-order-modal (orderAdded)="onOrderAdded($event)"></app-order-modal>
+</div>

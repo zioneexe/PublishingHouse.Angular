@@ -1,0 +1,136 @@
+/* General Styles */
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ededf7;
+  color: #333;
+}
+
+.customer-orders {
+  width: 95vw;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  color: #6c70e7;
+}
+
+/* Section Styles */
+section {
+  margin-bottom: 40px;
+}
+
+section h2 {
+  color: #6c70e7;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  margin-top: 25px;
+}
+/* Styles for the order list */
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 10px;
+  
+}
+
+li {
+  background-color: #f3f3f8;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li strong {
+  color: #333;
+  font-weight: bold;
+  
+}
+
+li span {
+  color: #888;
+}
+
+/* Status color */
+li span:last-child {
+  color: #6c70e7;
+}
+
+.add-order {
+  background-color: #6c70e7;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-order:hover {
+  background-color: #554abf;
+}
+
+.add-order:active {
+  transform: scale(0.98);
+}
+
+/* Card Styles */
+app-order-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+app-order-card .details {
+  display: flex;
+  flex-direction: column;
+}
+
+app-order-card .details span {
+  font-size: 0.9rem;
+  
+  border: 1px solid #6c53b8;
+}
+app-order-card .actions button {
+  color:o#6c63ff;
+}
+pp-order-card .actions button:active {
+  color: #554abf;
+}
+
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.pay-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.pay-btn:hover {
+  background-color: #45a049;
+}

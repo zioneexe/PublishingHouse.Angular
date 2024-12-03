@@ -1,0 +1,10 @@
+<div class="payment">
+  <h2>Payment</h2>
+  <p *ngIf="isLoading">Loading...</p>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <p>Total Amount: {{ totalAmount | currencyUAH }}</p>
+    <button (click)="initiatePayment()" [disabled]="totalAmount <= 0">Pay Now</button>
+  </ng-container>
+</div>

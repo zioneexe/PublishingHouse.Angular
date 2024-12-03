@@ -1,0 +1,87 @@
+.input svg {
+  border: transparent;
+  background-color: white;
+  border-radius: 12px;
+  padding: 0.5em;
+  filter: drop-shadow(2px 4px #b9bac2);
+  margin-right: 1em;
+}
+
+small {
+  color: red;
+  margin-top: 5px;
+  position: absolute;
+  left: 50%;
+  top: 90%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  text-wrap: nowrap;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  align-items: center;
+  height: 65vh;
+  width: 40vw;
+  background-color: #ECEDF6;
+  border: transparent;
+  border-radius: 12px;
+  box-shadow: 10px 10px #6370F0;
+  padding: 1em 2em;
+}
+
+.register-form {
+  display: grid;
+  height: 50%;
+  gap: 10px;
+  align-items: center;
+  padding: 2em 10em;
+}
+
+.controls {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  height: 15em;
+}
+
+.form-control {
+  position: relative;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.picture {
+  background: url("../../../app/assets/person-minimalist.png") #ECEDF6;
+  background-size: cover;
+  background-position: center;
+  height: 80%;
+  max-height: 60vh;
+}
+
+.heading {
+  font-size: 3em;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 10px;
+  font-size: small;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

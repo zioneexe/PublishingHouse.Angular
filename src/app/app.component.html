@@ -1,0 +1,12 @@
+
+<ng-container *ngIf="shouldShowHeaderFooter()">
+  <app-header></app-header>
+</ng-container>
+
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>
+
+<ng-container *ngIf="shouldShowHeaderFooter()">
+  <app-footer></app-footer>
+</ng-container>

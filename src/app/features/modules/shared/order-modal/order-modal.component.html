@@ -1,0 +1,173 @@
+<div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Add New Order</h2>
+
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+      <!-- Book Details -->
+      <div class="form-section">
+        <h3>Book Details</h3>
+
+        <div class="form-group">
+          <label for="bookName">Book Name</label>
+          <input
+            type="text"
+            id="bookName"
+            formControlName="bookName"
+            placeholder="Enter book name"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['bookName'].touched && orderForm.controls['bookName'].invalid">
+          Book name is required.
+        </small>
+
+        <div class="form-group">
+          <label for="authorName">Author Name</label>
+          <input
+            type="text"
+            id="authorName"
+            formControlName="authorName"
+            placeholder="Enter author name"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['authorName'].touched && orderForm.controls['authorName'].invalid">
+          Author name is required.
+        </small>
+
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <input
+            type="text"
+            id="genre"
+            formControlName="genre"
+            placeholder="Enter genre"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['genre'].touched && orderForm.controls['genre'].invalid">
+          Genre is required.
+        </small>
+
+        <div class="form-group">
+          <label for="pages">Number of Pages</label>
+          <input
+            type="number"
+            id="pages"
+            formControlName="pages"
+            placeholder="Enter number of pages"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['pages'].touched && orderForm.controls['pages'].invalid">
+          Enter a valid number of pages (minimum 1).
+        </small>
+
+        <div class="form-group">
+          <label for="publicationYear">Publication Year</label>
+          <input
+            type="number"
+            id="publicationYear"
+            formControlName="publicationYear"
+            placeholder="Enter publication year"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['publicationYear'].touched && orderForm.controls['publicationYear'].invalid">
+          Publication year is required.
+        </small>
+
+        <div class="form-group">
+          <label for="quantity">Book Quantity</label>
+          <input
+            type="number"
+            id="quantity"
+            formControlName="quantity"
+            placeholder="Enter quantity"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['quantity'].touched && orderForm.controls['quantity'].invalid">
+          Enter a valid quantity (minimum 1).
+        </small>
+
+        <div class="form-group">
+          <label for="bookPicture">Upload Book Picture</label>
+          <input
+            type="file"
+            id="bookPicture"
+            (change)="onFileSelect($event)"
+            accept="image/*"
+          />
+        </div>
+      </div>
+
+      <!-- Order Details -->
+      <div class="form-section">
+        <h3>Order Details</h3>
+
+        <div class="form-group">
+          <label for="printType">Print Type</label>
+          <select id="printType" formControlName="printType">
+            <option value="Standard">Standard</option>
+            <option value="Premium">Premium</option>
+          </select>
+        </div>
+        <small class="error" *ngIf="orderForm.controls['printType'].touched && orderForm.controls['printType'].invalid">
+          Print type is required.
+        </small>
+
+        <div class="form-group">
+          <label for="paperType">Paper Type</label>
+          <select id="paperType" formControlName="paperType">
+            <option value="Glossy">Glossy</option>
+            <option value="Matte">Matte</option>
+            <option value="Recycled">Recycled</option>
+          </select>
+        </div>
+        <small class="error" *ngIf="orderForm.controls['paperType'].touched && orderForm.controls['paperType'].invalid">
+          Paper type is required.
+        </small>
+
+        <div class="form-group">
+          <label for="coverType">Cover Type</label>
+          <select id="coverType" formControlName="coverType">
+            <option value="Soft">Soft</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <small class="error" *ngIf="orderForm.controls['coverType'].touched && orderForm.controls['coverType'].invalid">
+          Cover type is required.
+        </small>
+
+        <div class="form-group">
+          <label for="fasteningType">Fastening Type</label>
+          <select id="fasteningType" formControlName="fasteningType">
+            <option value="Stapled">Stapled</option>
+            <option value="Spiral">Spiral</option>
+            <option value="Bound">Bound</option>
+          </select>
+        </div>
+        <small class="error" *ngIf="orderForm.controls['fasteningType'].touched && orderForm.controls['fasteningType'].invalid">
+          Fastening type is required.
+        </small>
+
+        <div class="form-group">
+          <label for="completionDate">Completion Date</label>
+          <input
+            type="date"
+            id="completionDate"
+            formControlName="completionDate"
+          />
+        </div>
+        <small class="error" *ngIf="orderForm.controls['completionDate'].touched && orderForm.controls['completionDate'].invalid">
+          Completion date is required.
+        </small>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="submit" class="submit-btn" [disabled]="orderForm.invalid">
+          Confirm
+        </button>
+        <button type="button" class="cancel-btn" (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

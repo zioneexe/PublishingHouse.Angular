@@ -1,0 +1,31 @@
+image: node:current-slim
+
+stages:
+  - setup
+  #- test
+  - deploy
+
+install:
+  stage: setup
+  script: 
+    - npm ci
+
+#unit test:
+#  stage: test
+#  allow_failure: true
+#  before_script:
+#    - apt-get update && apt-get install -y wget
+#    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#    - apt install -y ./google-chrome*.deb;
+#    - export CHROME_BIN=/usr/bin/google-chrome
+#  script:
+#    - npm ci
+#    - npm run test
+
+deployment: 
+  stage: deploy
+  before_script:
+    - npm ci
+  script:
+    - npm ci
+    - npx cross-env NG_DEPLOY_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID NG_DEPLOY_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY NG_DEPLOY_AWS_BUCKET=my-first-angular NG_DEPLOY_AWS_REGION=eu-north-1-region ng deploy
