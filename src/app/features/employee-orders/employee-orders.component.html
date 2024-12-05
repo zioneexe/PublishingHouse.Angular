@@ -71,18 +71,29 @@
     <ng-container matColumnDef="orderStatus">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Order Status </mat-header-cell>
       <mat-cell *matCellDef="let order">
-        <span [ngClass]="getStatusClass(order.orderStatus)">
-          {{ order.orderStatus.name }}
-        </span>
+        <mat-form-field appearance="fill" >
+          <mat-select panelWidth
+            [value]="order.orderStatus.orderStatusId"
+            (selectionChange)="onStatusChange(order, $event.value)"
+          >
+            <mat-option *ngFor="let status of orderStatuses" [value]="status.id">
+              {{ status.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
       <mat-cell *matCellDef="let order">
-        <button mat-button color="primary" (click)="onEdit(order)">Edit</button>
-        <button mat-button color="warn" (click)="onDelete(order)">Delete</button>
-      </mat-cell>
+        <button mat-mini-fab color="primary" class="action-button" (click)="onEdit(order)">
+          <mat-icon fontIcon="edit_square"></mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" class="action-button" (click)="onDelete(order)">
+          <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+      </mat-cell>      
     </ng-container>
 
     <!-- Header and Row Definitions -->

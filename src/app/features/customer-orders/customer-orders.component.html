@@ -6,36 +6,58 @@
     
     <section>
       <h2>Awaiting Confirmation</h2>
-      <div *appShowIfNotEmpty="awaitingOrders; else noAwaitingOrders">
+      <div *ngIf="awaitingOrders.length > 0; else noAwaitingOrders">
         <ul>
           <li *ngFor="let order of awaitingOrders">
             <strong>{{ order.bookName }}</strong>
-            <span>{{ order.dateRange || 'No dates specified' }}</span>
-            <span>{{ order.status }}</span>
+            <span>Author: {{ order.authorName }}</span>
+            <span>Genre: {{ order.genre }}</span>
+            <span>Published: {{ order.publicationYear }}</span>
+            <span>Quantity: {{ order.quantity }}</span>
+            <span>Print Type: {{ order.printType }}</span>
+            <span>Paper Type: {{ order.paperType }}</span>
+            <span>Cover Type: {{ order.coverType }}</span>
+            <span>Fastening Type: {{ order.fasteningType }}</span>
+            <span>Laminated: {{ order.isLaminated ? 'Yes' : 'No' }}</span>
+            <span>Completion Date: {{ order.completionDate | date }}</span>
+            <button mat-raised-button color="white" (click)="onCancelOrderRequest(order.id)" *ngIf="order.orderStatus?.name !== 'Canceled'">
+              cancel
+            </button>
           </li>
         </ul>
       </div>
       <ng-template #noAwaitingOrders>
         <p>No orders awaiting confirmation.</p>
       </ng-template>
-    </section>
+    </section>    
     <section>
-      <h2>My Orders</h2>
-      <div *appShowIfNotEmpty="myOrders; else noMyOrders">
+      <h2>All Orders</h2>
+      <div *appShowIfNotEmpty="customerOrders; else noMyOrders">
         <ul>
-          <li *ngFor="let order of myOrders">
-            <strong>{{ order.bookName }}</strong>
-            <span>{{ order.dateRange || 'No dates specified' }}</span>
-            <span>{{ order.status }}</span>
-            <button class="delete-btn" (click)="onDeleteOrder(order.id)">Delete</button>
+          <li *ngFor="let order of customerOrders">
+            <strong>Order #: {{ order.number }}</strong>
+            <p><strong>Print Type:</strong> {{ order.printType }}</p>
+            <p><strong>Paper Type:</strong> {{ order.paperType }}</p>
+            <p><strong>Cover Type:</strong> {{ order.coverType }}</p>
+            <p><strong>Fastening Type:</strong> {{ order.fasteningType }}</p>
+            <p><strong>Laminated:</strong> {{ order.isLaminated ? 'Yes' : 'No' }}</p>
+            <p><strong>Price:</strong> {{ order.price | currencyUAH }}</p>
+            <p><strong>Registration Date:</strong> {{ order.registrationDate | date }}</p>
+            <p><strong>Completion Date:</strong> {{ order.completionDate | date }}</p>
+            <p><strong>Customer:</strong> {{ order.customer?.name }}</p>
+            <p><strong>Employee:</strong> {{ order.employee?.name }}</p>
+            <p><strong>Status:</strong> {{ order.orderStatus?.name }}</p>
+            <button mat-raised-button color="white" (click)="onCancelOrder(order.orderId)" *ngIf="order.orderStatus?.name !== 'Canceled'">
+              cancel
+            </button>
           </li>
         </ul>
       </div>
       <ng-template #noMyOrders>
         <p>No orders found.</p>
       </ng-template>
-    </section>
+    </section>    
     <button class="add-order" (click)="addOrder()">Order Print</button>
   </div>
-  <app-order-modal (orderAdded)="onOrderAdded($event)"></app-order-modal>
+  <app-order-modal (orderAdded)="onOrderAdded()"></app-order-modal>
 </div>

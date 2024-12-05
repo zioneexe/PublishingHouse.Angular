@@ -1,17 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @import url('https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap');
+
 
 * {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  font-weight: 600;
+  font-weight: 600 !important;
   color:  #2c40f0;
-}
-
-button {
-  filter: drop-shadow(2px 4px #b9bac2);
 }
 
 input[type='text'],
@@ -117,6 +116,7 @@ input[type='email']:focus {
     --background: #fff;
     --disabled: #F6F8FF;
     --disabled-inner: #E1E6F9;
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     height: 21px;
@@ -203,3 +203,6 @@ input[type='email']:focus {
 .checkbox-wrapper-13 *:after {
   box-sizing: inherit;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

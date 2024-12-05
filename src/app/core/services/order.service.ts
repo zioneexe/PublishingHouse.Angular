@@ -3,21 +3,30 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { PrintOrder } from '../models/PrintOrder';
 import { environment } from '../../../environments/environment.development';
+import { PrintOrderResponse } from '../models/PrintOrderResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
-  private url = environment.baseApiUrl + '/api/orders';
+  private url = `${environment.baseApiUrl}/api/orders`;
 
   constructor(private http: HttpClient) {}
+
+  createOrder(orderData: any): Observable<PrintOrder> {
+    return this.http.post<PrintOrder>(this.url, orderData);
+  }
 
   getOrders(): Observable<PrintOrder[]> {
     return this.http.get<PrintOrder[]>(this.url);
   }
 
-  addOrder(order: FormData): Observable<PrintOrder> {
-    return this.http.post<PrintOrder>(this.url, order);
+  getOrdersByEmployeeId(employeeId: number): Observable<PrintOrder[]> {
+    return this.http.get<PrintOrder[]>(`${this.url}/employee/${employeeId}`);
+  }
+
+  getOrdersByCustomerId(customerId: number): Observable<PrintOrderResponse[]> {
+    return this.http.get<PrintOrderResponse[]>(`${this.url}/customer/${customerId}`);
   }
 
   updateOrder(
@@ -41,4 +50,9 @@ export class OrderService {
   deleteOrder(orderId: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${orderId}`);
   }
+
+  cancelOrder(orderId: number): Observable<void> {
+    return this.http.put<void>(`${this.url}/${orderId}/cancel`, {});
+  }
+  
 }

@@ -1,0 +1,85 @@
+.payment {
+  max-width: 700px; 
+  min-width: 390px;
+  margin: 30px auto; 
+  padding: 30px; 
+  background: #ffffff;
+  border-radius: 12px; 
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15); 
+}
+
+.payment-title {
+  text-align: center;
+  margin-bottom: 30px; 
+  font-size: 2rem; 
+  color: #333333;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ff5252;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: #ff5252; 
+  font-size: 0.9rem; 
+  margin-top: 5px;
+}
+
+
+.total-amount {
+  text-align: center;
+  font-size: 1.2rem; 
+  font-weight: bold;
+}
+
+.money {
+  color: #4caf50;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; 
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  gap: 30px;
+}
+
+.form-group-inline {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px; 
+}
+
+.form-label {
+  font-size: 1.2rem; 
+  color: #555555;
+}
+
+.form-input {
+  padding: 12px; 
+  border: 1.5px solid #cccccc; 
+  border-radius: 6px; 
+  font-size: 1.2rem; 
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #3f51b5;
+}
+
+.submit-button {
+  align-self: center;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border-radius: 6px;
+}

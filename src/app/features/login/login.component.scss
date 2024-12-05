@@ -60,7 +60,7 @@ small {
 }
 
 .picture {
-  background: url("../../../app/assets/person-minimalist.png") #ECEDF6;
+  background: url("../../../assets/person-minimalist.png") #ECEDF6;
   background-size: cover;
   background-position: center;
   height: 80%;
@@ -75,6 +75,10 @@ small {
   text-align: center;
   margin-top: 10px;
   font-size: small;
+}
+
+.register-link a {
+  display: block;
 }
 
 .register-link a {

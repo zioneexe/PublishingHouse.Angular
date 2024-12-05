@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Edit Order</h2>
+<mat-dialog-content>
+  <form [formGroup]="orderForm" style="display: flex; flex-direction: column; gap: 16px;">
+    <mat-form-field appearance="fill">
+      <mat-label>Print Type</mat-label>
+      <input matInput formControlName="printType" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Paper Type</mat-label>
+      <input matInput formControlName="paperType" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Cover Type</mat-label>
+      <input matInput formControlName="coverType" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fastening Type</mat-label>
+      <input matInput formControlName="fasteningType" />
+    </mat-form-field>
+
+    <mat-checkbox formControlName="isLaminated">Laminated</mat-checkbox>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Completion Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="completionDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="margin-top: 16px;">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

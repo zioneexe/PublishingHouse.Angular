@@ -4,23 +4,24 @@ import { LoginComponent } from './features/login/login.component';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { BookDetailsComponent } from './features/book-details/book-details.component';
 
 export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-    title: 'Register - Publishing House',
+    title: 'Register - pH',
   },
   {
     path: 'login',
     component: LoginComponent,
-    title: 'Login - Publishing House',
+    title: 'Login - pH',
   },
   {
     path: 'unauthorized',
     loadComponent: () =>
       import('./features/unauthorized/unauthorized.component').then((m) => m.UnauthorizedComponent),
-    title: 'Unauthorized - Publishing House',
+    title: 'Unauthorized - pH',
   },
   {
     path: 'payment',
@@ -28,7 +29,7 @@ export const routes: Routes = [
       import('./features/payment/payment.component').then((m) => m.PaymentComponent),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Customer'] },
-    title: 'Payment - Publishing House',
+    title: 'Payment - pH',
   },
   {
     path: 'customer-orders',
@@ -36,7 +37,7 @@ export const routes: Routes = [
       import('./features/customer-orders/customer-orders.component').then((m) => m.CustomerOrdersComponent),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Customer'] },
-    title: 'Customer Orders - Publishing House',
+    title: 'Your orders - pH',
   },
   {
     path: 'employee-orders',
@@ -44,7 +45,7 @@ export const routes: Routes = [
       import('./features/employee-orders/employee-orders.component').then((m) => m.EmployeeOrdersComponent),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Employee', 'Admin'] },
-    title: 'Employee Orders - Publishing House',
+    title: '[Employee] Orders - pH',
   },
   {
     path: 'admin',
@@ -52,8 +53,9 @@ export const routes: Routes = [
       import('./features/admin-orders/admin-orders.component').then((m) => m.AdminOrdersComponent),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Admin'] },
-    title: 'Admin Dashboard - Publishing House',
+    title: '[Admin] Dashboard - pH',
   },
+  { path: 'books/view/:id', component: BookDetailsComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent, title: '404 - Page Not Found' },
 ];

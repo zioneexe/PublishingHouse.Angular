@@ -1,6 +1,6 @@
 <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h2>Add New Order</h2>
+    <h2 class="modal-title">Add New Order</h2>
 
     <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
       <!-- Book Details -->
@@ -15,10 +15,10 @@
             formControlName="bookName"
             placeholder="Enter book name"
           />
+          <small class="error" *ngIf="orderForm.controls['bookName'].touched && orderForm.controls['bookName'].invalid">
+            Book name is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['bookName'].touched && orderForm.controls['bookName'].invalid">
-          Book name is required.
-        </small>
 
         <div class="form-group">
           <label for="authorName">Author Name</label>
@@ -28,10 +28,10 @@
             formControlName="authorName"
             placeholder="Enter author name"
           />
+          <small class="error" *ngIf="orderForm.controls['authorName'].touched && orderForm.controls['authorName'].invalid">
+            Author name is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['authorName'].touched && orderForm.controls['authorName'].invalid">
-          Author name is required.
-        </small>
 
         <div class="form-group">
           <label for="genre">Genre</label>
@@ -41,23 +41,10 @@
             formControlName="genre"
             placeholder="Enter genre"
           />
+          <small class="error" *ngIf="orderForm.controls['genre'].touched && orderForm.controls['genre'].invalid">
+            Genre is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['genre'].touched && orderForm.controls['genre'].invalid">
-          Genre is required.
-        </small>
-
-        <div class="form-group">
-          <label for="pages">Number of Pages</label>
-          <input
-            type="number"
-            id="pages"
-            formControlName="pages"
-            placeholder="Enter number of pages"
-          />
-        </div>
-        <small class="error" *ngIf="orderForm.controls['pages'].touched && orderForm.controls['pages'].invalid">
-          Enter a valid number of pages (minimum 1).
-        </small>
 
         <div class="form-group">
           <label for="publicationYear">Publication Year</label>
@@ -67,10 +54,10 @@
             formControlName="publicationYear"
             placeholder="Enter publication year"
           />
+          <small class="error" *ngIf="orderForm.controls['publicationYear'].touched && orderForm.controls['publicationYear'].invalid">
+            Publication year is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['publicationYear'].touched && orderForm.controls['publicationYear'].invalid">
-          Publication year is required.
-        </small>
 
         <div class="form-group">
           <label for="quantity">Book Quantity</label>
@@ -80,10 +67,10 @@
             formControlName="quantity"
             placeholder="Enter quantity"
           />
+          <small class="error" *ngIf="orderForm.controls['quantity'].touched && orderForm.controls['quantity'].invalid">
+            Enter a valid quantity (minimum 1).
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['quantity'].touched && orderForm.controls['quantity'].invalid">
-          Enter a valid quantity (minimum 1).
-        </small>
 
         <div class="form-group">
           <label for="bookPicture">Upload Book Picture</label>
@@ -93,6 +80,9 @@
             (change)="onFileSelect($event)"
             accept="image/*"
           />
+          <small class="error" *ngIf="!selectedFile && orderForm.controls['bookPicture'].touched">
+            Book picture is required.
+          </small>
         </div>
       </div>
 
@@ -103,48 +93,62 @@
         <div class="form-group">
           <label for="printType">Print Type</label>
           <select id="printType" formControlName="printType">
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
+            <option value="Standard">Offset</option>
+            <option value="Premium">Digital</option>
+            <option value="Premium">Letterpress</option>
+            <option value="Premium">Screen Printing</option>
           </select>
+          <small class="error" *ngIf="orderForm.controls['printType'].touched && orderForm.controls['printType'].invalid">
+            Print type is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['printType'].touched && orderForm.controls['printType'].invalid">
-          Print type is required.
-        </small>
 
         <div class="form-group">
           <label for="paperType">Paper Type</label>
           <select id="paperType" formControlName="paperType">
             <option value="Glossy">Glossy</option>
             <option value="Matte">Matte</option>
+            <option value="Recycled">Coated</option>
             <option value="Recycled">Recycled</option>
           </select>
+          <small class="error" *ngIf="orderForm.controls['paperType'].touched && orderForm.controls['paperType'].invalid">
+            Paper type is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['paperType'].touched && orderForm.controls['paperType'].invalid">
-          Paper type is required.
-        </small>
 
         <div class="form-group">
           <label for="coverType">Cover Type</label>
           <select id="coverType" formControlName="coverType">
-            <option value="Soft">Soft</option>
-            <option value="Hard">Hard</option>
+            <option value="Soft">Softcover</option>
+            <option value="Hard">Hardcover</option>
+            <option value="Hard">Flexible</option>
           </select>
+          <small class="error" *ngIf="orderForm.controls['coverType'].touched && orderForm.controls['coverType'].invalid">
+            Cover type is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['coverType'].touched && orderForm.controls['coverType'].invalid">
-          Cover type is required.
-        </small>
 
         <div class="form-group">
           <label for="fasteningType">Fastening Type</label>
           <select id="fasteningType" formControlName="fasteningType">
-            <option value="Stapled">Stapled</option>
+            <option value="Stapled">Perfect</option>
+            <option value="Stapled">Saddle Stitching</option>
             <option value="Spiral">Spiral</option>
-            <option value="Bound">Bound</option>
+            <option value="Bound">Case</option>
           </select>
+          <small class="error" *ngIf="orderForm.controls['fasteningType'].touched && orderForm.controls['fasteningType'].invalid">
+            Fastening type is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['fasteningType'].touched && orderForm.controls['fasteningType'].invalid">
-          Fastening type is required.
-        </small>
+
+        <div class="form-group">
+          <label for="isLaminated">Is Laminated</label>
+          <input
+            type="checkbox"
+            id="isLaminated"
+            formControlName="isLaminated"
+          />
+        </div>
 
         <div class="form-group">
           <label for="completionDate">Completion Date</label>
@@ -153,10 +157,10 @@
             id="completionDate"
             formControlName="completionDate"
           />
+          <small class="error" *ngIf="orderForm.controls['completionDate'].touched && orderForm.controls['completionDate'].invalid">
+            Completion date is required.
+          </small>
         </div>
-        <small class="error" *ngIf="orderForm.controls['completionDate'].touched && orderForm.controls['completionDate'].invalid">
-          Completion date is required.
-        </small>
       </div>
 
       <!-- Footer -->

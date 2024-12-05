@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  private url = environment.baseApiUrl + '/api/auth';
+  private url = `${environment.baseApiUrl}/api/auth`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -34,7 +34,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  getCustomerId(): number | null {
+  getUserId(): number | null {
     const customerId = localStorage.getItem('id');
     return customerId ? parseInt(customerId, 10) : null;
   }

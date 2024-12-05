@@ -1,6 +1,13 @@
 <div class="content">
   <form [formGroup]="form" class="login-form" (ngSubmit)="onSubmit()">
     <span class="heading">Sign In</span> 
+
+    @if (errorMessage) {
+      <small>
+        {{ errorMessage }}
+      </small>
+    }
+ 
     <div class="controls">
       <div class="form-control">
         <div class="input">
@@ -39,6 +46,7 @@
         }
       </div>
     </div>
+
     <div class="register-link">
       <p>Don't have an account? <a routerLink="/register">Register</a></p>
     </div>

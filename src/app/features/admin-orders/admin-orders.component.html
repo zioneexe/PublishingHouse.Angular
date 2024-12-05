@@ -1,1 +1,29 @@
-<p>admin-orders works!</p>
+<div class="admin-orders">
+  <div class="container">
+    <h1>All Orders</h1>
+    <section>
+      <div *ngIf="allOrders.length > 0; else noOrders">
+        <ul>
+          <li *ngFor="let order of allOrders">
+            <strong>{{ order.bookName }}</strong>
+            <span>Author: {{ order.authorName }}</span>
+            <span>Genre: {{ order.genre }}</span>
+            <span>Published: {{ order.publicationYear }}</span>
+            <span>Quantity: {{ order.quantity }}</span>
+            <span>Print Type: {{ order.printType }}</span>
+            <span>Paper Type: {{ order.paperType }}</span>
+            <span>Cover Type: {{ order.coverType }}</span>
+            <span>Fastening Type: {{ order.fasteningType }}</span>
+            <span>Laminated: {{ order.isLaminated ? 'Yes' : 'No' }}</span>
+            <span>Completion Date: {{ order.completionDate | date }}</span>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noOrders>
+        <p>No orders found.</p>
+      </ng-template>
+    </section>
+    <button class="add-order" (click)="addOrder()">Add New Order</button>
+  </div>
+  <app-order-modal (orderAdded)="onOrderAdded()"></app-order-modal>
+</div>

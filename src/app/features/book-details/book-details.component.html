@@ -1,1 +1,50 @@
-<p>book-details works!</p>
+<div class="book-details-container">
+  <!-- Navigation Buttons -->
+  <div class="navigation-buttons">
+    <button mat-fab extended color="white" class="nav-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Go Back
+    </button>
+  </div>
+
+  <!-- Book Details Card -->
+  <div class="book-details-card">
+    <!-- Title -->
+    <h2 class="book-title">{{ bookDetails?.name || 'Unknown Title' }}</h2>
+
+    <!-- Main Section: Picture and Characteristics -->
+    <div class="main-section">
+      <!-- Picture -->
+      <div class="book-cover-section">
+        <img
+          *ngIf="bookDetails?.coverImagePath; else noCoverTemplate"
+          [src]="bookDetails.coverImagePath"
+          alt="Book Cover"
+          class="book-cover"
+        />
+      </div>
+      <ng-template #noCoverTemplate>
+        <p>No cover image available.</p>
+      </ng-template>
+
+      <!-- Characteristics -->
+      <div class="book-info-section">
+        <p><strong>Author:</strong> {{ bookDetails?.author || 'Unknown Author' }}</p>
+        <p><strong>Genre:</strong> {{ bookDetails?.genre || 'Unknown Genre' }}</p>
+        <p><strong>Pages:</strong> {{ bookDetails?.pages || 'N/A' }}</p>
+        <p>
+          <strong>Publication Year:</strong>
+          {{ bookDetails?.publicationYear || 'Unknown Year' }}
+        </p>
+        <p><strong>Size:</strong> {{ bookDetails?.size || 'N/A' }}</p>
+        <p><strong>Weight:</strong> {{ bookDetails?.weight || 'N/A' }}</p>
+      </div>
+    </div>
+
+    <!-- Annotation Section -->
+    <div class="book-annotation" *ngIf="bookDetails?.annotation">
+      <h3 class="annotation-title">Annotation</h3>
+      <p>{{ bookDetails.annotation }}</p>
+    </div>
+  </div>
+</div>

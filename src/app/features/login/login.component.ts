@@ -18,6 +18,8 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent {
   fb = inject(NonNullableFormBuilder);
 
+  errorMessage: string | null = null;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   form: FormGroup = this.fb.group({
@@ -35,7 +37,7 @@ export class LoginComponent {
         next: (response: LoginResponse) => {
           console.log('Login successful', response);
 
-          localStorage.setItem('id', response.id.toString());
+          localStorage.setItem('id', response.id?.toString());
           localStorage.setItem('token', response.token);
           localStorage.setItem('role', response.role);
           localStorage.setItem('userName', response.userName);
@@ -44,6 +46,11 @@ export class LoginComponent {
         },
         error: (error) => {
           console.error('Login failed', error);
+          this.errorMessage = error.error?.message || 'An error occurred during login. Please try again.';
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         },
       });
     } else {
@@ -54,7 +61,7 @@ export class LoginComponent {
   private redirectUser(role: string): void {
     switch (role) {
       case 'Admin':
-        this.router.navigate(['/admin-orders']);
+        this.router.navigate(['/admin']);
         break;
       case 'Employee':
         this.router.navigate(['/employee-orders']);
