@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ViewChild } from '@angular/core';
 import { OrderService } from '../../core/services/order.service';
 import { CommonModule } from '@angular/common';
-import { CurrencyUAHPipe } from "../../core/pipes/currency-uah.pipe";
+import { CurrencyUAHPipe } from '../../core/pipes/currency-uah.pipe';
 import { AuthService } from '../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditOrderComponent } from '../edit-order/edit-order.component';
@@ -13,6 +13,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, NgModel } from '@angular/forms';
+import { PrintOrderUpdateRequest } from '../../core/models/PrintOrderUpdateRequest';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { OrderStatusService } from '../../core/services/order-status.service';
 
 @Component({
   selector: 'app-employee-orders',
@@ -20,14 +25,17 @@ import { FormsModule, NgModel } from '@angular/forms';
   styleUrls: ['./employee-orders.component.scss'],
   imports: [
     MatTableModule,
-    MatPaginator,
+    MatPaginatorModule,
+    MatSortModule,
     MatButtonModule,
     MatIconModule,
+    MatInputModule,
     MatSelectModule,
+    MatFormFieldModule,
     CommonModule,
     CurrencyUAHPipe,
-    FormsModule
-  ]
+    FormsModule,
+  ],
 })
 export class EmployeeOrdersComponent implements OnInit {
   displayedColumns: string[] = [
@@ -43,23 +51,36 @@ export class EmployeeOrdersComponent implements OnInit {
     'customerName',
     'price',
     'orderStatus',
-    'actions'
+    'actions',
   ];
   dataSource = new MatTableDataSource<any>();
 
-  orderStatuses = [
-    { id: 1, name: 'In Progress' },
-    { id: 2, name: 'Completed' },
-    { id: 3, name: 'Cancelled' },
-    { id: 4, name: 'On Hold' }
-  ];  
+  orderStatuses: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private orderService: OrderService, private authService: AuthService, private dialog: MatDialog) {}
+  constructor(
+    private orderService: OrderService,
+    private orderStatusService: OrderStatusService,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
+    this.loadOrderStatuses();
     this.loadOrders();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  loadOrderStatuses(): void {
+    this.orderStatusService.getOrderStatuses().subscribe((statuses) => {
+      this.orderStatuses = statuses;
+    });
   }
 
   loadOrders(): void {
@@ -87,9 +108,20 @@ export class EmployeeOrdersComponent implements OnInit {
 
   onStatusChange(order: any, newStatusId: number): void {
     if (order.orderStatus.id !== newStatusId) {
-      this.orderService.updateOrder(order.orderId, { orderStatusId: newStatusId }).subscribe({
+      const { orderId, ...rest } = order;
+
+      const updatedOrder: Partial<PrintOrderUpdateRequest> = {
+        ...rest,
+        customerId: order.customer?.customerId ?? null,
+        employeeId: order.employee?.employeeId ?? null,
+        orderStatusId: newStatusId,
+      };
+
+      console.log('Updated: ', updatedOrder);
+
+      this.orderService.updateOrder(order.orderId, updatedOrder).subscribe({
         next: () => {
-          console.log(`Order ${order.id} status updated successfully.`);
+          console.log(`Order ${order.orderId} status updated successfully.`);
           order.orderStatus.id = newStatusId;
         },
         error: (err) => {
@@ -99,9 +131,17 @@ export class EmployeeOrdersComponent implements OnInit {
     }
   }
 
-  calculateDateDifference(startDate: Date | null, endDate: Date | null): number | null {
-    if (!startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      return null; 
+  calculateDateDifference(
+    startDate: Date | null,
+    endDate: Date | null
+  ): number | null {
+    if (
+      !startDate ||
+      !endDate ||
+      isNaN(startDate.getTime()) ||
+      isNaN(endDate.getTime())
+    ) {
+      return null;
     }
     const diffInTime = endDate.getTime() - startDate.getTime();
     return Math.floor(diffInTime / (1000 * 60 * 60 * 24));
@@ -134,13 +174,41 @@ export class EmployeeOrdersComponent implements OnInit {
     const dialogRef = this.dialog.open(EditOrderComponent, {
       width: '500px',
       data: order,
-      disableClose: true, 
-      autoFocus: true, 
+      disableClose: true,
+      autoFocus: true,
     });
-  
-    dialogRef.afterClosed().subscribe((updatedOrder) => {
-      if (updatedOrder) {
-        this.orderService.updateOrder(order.id, updatedOrder).subscribe({
+
+    dialogRef.afterClosed().subscribe((updatedDetails) => {
+      console.log('U[:', order);
+      if (updatedDetails) {
+        const { orderId, ...rest } = order;
+
+        let formattedCompletionDate = null;
+        if (updatedDetails.completionDate instanceof Date) {
+          const date = updatedDetails.completionDate;
+          formattedCompletionDate = `${date.getFullYear()}-${(
+            date.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+        }
+
+        const updatedOrder: Partial<PrintOrderUpdateRequest> = {
+          ...rest,
+          customerId: order.customer?.customerId ?? null,
+          employeeId: order.employee?.employeeId ?? null,
+          orderStatusId: order.orderStatus?.orderStatusId ?? null,
+          paperType: updatedDetails.paperType,
+          printType: updatedDetails.paperType,
+          fasteningType: updatedDetails.fasteningType,
+          coverType: updatedDetails.coverType,
+          isLaminated: updatedDetails.isLaminated,
+          completionDate: formattedCompletionDate,
+        };
+
+        console.log(updatedOrder);
+
+        this.orderService.updateOrder(order.orderId, updatedOrder).subscribe({
           next: () => {
             console.log('Order updated successfully');
             this.loadOrders();
@@ -152,18 +220,25 @@ export class EmployeeOrdersComponent implements OnInit {
       }
     });
   }
-  
+
   onDelete(order: any): void {
     if (confirm(`Are you sure you want to delete order ${order.number}?`)) {
       this.orderService.deleteOrder(order.orderId).subscribe({
         next: () => {
           console.log('Order deleted successfully');
-          this.dataSource.data = this.dataSource.data.filter((o) => o.id !== order.id);
+          this.dataSource.data = this.dataSource.data.filter(
+            (o) => o.id !== order.id
+          );
         },
         error: (err) => {
           console.error('Error deleting order:', err);
         },
       });
     }
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

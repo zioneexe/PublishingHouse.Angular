@@ -15,7 +15,15 @@ export class BookService {
     return this.http.get<any>(`${this.baseUrl}/${bookId}`);
   }
 
-  createBook(bookData: FormData): Observable<any> {
+  createBookFromForm(bookData: FormData): Observable<any> {
+    return this.http.post<FormData>(this.baseUrl, bookData);
+  }
+
+  createBook(bookData: any): Observable<any> {
     return this.http.post<any>(this.baseUrl, bookData);
+  }
+
+  createBookWithId(bookData: any): Observable<any> {
+    return this.http.post<number>(`${this.baseUrl}/book-id`, bookData);
   }
 }

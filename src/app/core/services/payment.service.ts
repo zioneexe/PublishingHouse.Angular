@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { PaymentRequest } from '../models/PaymentRequest';
-import { PaymentResponse } from '../models/PaymentResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,7 @@ export class PaymentService {
     return this.http.get<number>(`${this.baseUrl}/total/${customerId}`);
   }
 
-  initiatePayment(paymentRequest: PaymentRequest): Observable<PaymentResponse> {
-    return this.http.post<PaymentResponse>(`${this.baseUrl}/initiate`, paymentRequest);
+  initiatePayment(paymentRequest: PaymentRequest): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/initiate`, paymentRequest);
   }
 }

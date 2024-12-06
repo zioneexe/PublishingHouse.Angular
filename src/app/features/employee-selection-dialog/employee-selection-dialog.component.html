@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Assign to Employee</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Employee</mat-label>
+    <mat-select [(value)]="selectedEmployee">
+      <mat-option *ngFor="let employee of data.employees" [value]="employee">
+        {{ employee.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="selectedEmployee">Select</button>
+</mat-dialog-actions>

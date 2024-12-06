@@ -7,11 +7,18 @@ import { ModalService } from '../../core/services/order-modal.service';
 import { ShowIfNotEmptyDirective } from '../../core/directives/show-if-not-empty.directive';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { OrderService } from '../../core/services/order.service';
 import { PrintOrderResponse } from '../../core/models/PrintOrderResponse';
 import { CurrencyUAHPipe } from '../../core/pipes/currency-uah.pipe';
 import { OrderBookService } from '../../core/services/order-book.service';
+import { OrderRequestModalComponent } from '../order-request-modal/order-request-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+interface ExpandableOrder extends PrintOrderResponse {
+  isExpanded: boolean;
+}
 
 @Component({
   selector: 'app-customer-orders',
@@ -23,13 +30,16 @@ import { OrderBookService } from '../../core/services/order-book.service';
     ShowIfNotEmptyDirective,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    MatExpansionModule,
     RouterModule,
     CurrencyUAHPipe
   ],
 })
 export class CustomerOrdersComponent implements OnInit {
+
   awaitingOrders: any[] = [];
-  customerOrders: PrintOrderResponse[] = [];
+  customerOrders: ExpandableOrder[] = [];
   orderBooks: any[] = [];
 
   constructor(
@@ -37,7 +47,8 @@ export class CustomerOrdersComponent implements OnInit {
     private orderBookService: OrderBookService,
     private orderService: OrderService,
     private authService: AuthService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +63,8 @@ export class CustomerOrdersComponent implements OnInit {
     if (customerId) {
       this.orderRequestService.getByCustomerId(customerId).subscribe({
         next: (orders) => {
-          this.awaitingOrders = orders;
+          this.awaitingOrders = orders.map((order) => ({ ...order, isExpanded: false }));
+          console.log(orders);
         },
         error: (err) => {
           console.error('Error fetching awaiting orders:', err);
@@ -69,7 +81,8 @@ export class CustomerOrdersComponent implements OnInit {
     if (customerId) {
       this.orderService.getOrdersByCustomerId(customerId).subscribe({
         next: (orders) => {
-          this.customerOrders = orders;
+          this.customerOrders = orders.map((order) => ({ ...order, isExpanded: false }));
+          console.log(orders);
         },
         error: (err) => {
           console.error('Error fetching customer orders:', err);
@@ -105,7 +118,19 @@ export class CustomerOrdersComponent implements OnInit {
       this.orderService.cancelOrder(orderId).subscribe({
         next: () => {
           console.log(`Order #${orderId} canceled successfully.`);
-          this.loadCustomerOrders();
+          
+          setTimeout(() => {
+            console.log(`Deleting order #${orderId} after 3 seconds.`);
+            this.orderService.deleteOrder(orderId).subscribe({
+              next: () => {
+                console.log(`Order #${orderId} deleted successfully.`);
+                this.loadCustomerOrders(); 
+              },
+              error: (err) => {
+                console.error(`Error deleting order #${orderId}:`, err);
+              },
+            });
+          }, 3000);
         },
         error: (err) => {
           console.error(`Error canceling order #${orderId}:`, err);
@@ -115,14 +140,34 @@ export class CustomerOrdersComponent implements OnInit {
   }
 
   onCancelOrderRequest(orderRequestId: number): void {
-    this.orderRequestService.deleteOrderRequest(orderRequestId).subscribe({
-      next: () => {
-        console.log(`Order request #${orderRequestId} deleted successfully.`);
-        this.loadAwaitingOrders();
-      },
-      error: (err) => {
-        console.error(`Error deleting order request #${orderRequestId}:`, err);
-      },
+    if (confirm('Are you sure you want to cancel this order request?')) {
+      this.orderRequestService.deleteOrderRequest(orderRequestId).subscribe({
+        next: () => {
+          console.log(`Order request #${orderRequestId} deleted successfully.`);
+          this.loadAwaitingOrders();
+        },
+        error: (err) => {
+          console.error(`Error deleting order request #${orderRequestId}:`, err);
+        },
+      });
+    }
+  }
+  
+  onEditOrderRequest(orderRequest: any): void {
+    const dialogRef = this.dialog.open(OrderRequestModalComponent, {
+      width: '500px',
+      data: orderRequest
     });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadAwaitingOrders(); 
+      }
+    });
+  }
+  
+
+  toggleExpand(orderType: 'awaitingOrders' | 'customerOrders', index: number): void {
+    this[orderType][index].isExpanded = !this[orderType][index].isExpanded;
   }
 }   

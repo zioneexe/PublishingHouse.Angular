@@ -1,41 +1,73 @@
 <div class="customer-orders">
   <div class="container">
     <div class="header-actions">
-      <button class="pay-btn" routerLink="/payment">Pay for Orders</button>
+      <button mat-raised-button color="white" class="pay-btn" routerLink="/payment">Pay for Orders</button>
     </div>
-    
+
+    <!-- Awaiting Confirmation -->
     <section>
       <h2>Awaiting Confirmation</h2>
-      <div *ngIf="awaitingOrders.length > 0; else noAwaitingOrders">
-        <ul>
-          <li *ngFor="let order of awaitingOrders">
-            <strong>{{ order.bookName }}</strong>
-            <span>Author: {{ order.authorName }}</span>
-            <span>Genre: {{ order.genre }}</span>
-            <span>Published: {{ order.publicationYear }}</span>
-            <span>Quantity: {{ order.quantity }}</span>
-            <span>Print Type: {{ order.printType }}</span>
-            <span>Paper Type: {{ order.paperType }}</span>
-            <span>Cover Type: {{ order.coverType }}</span>
-            <span>Fastening Type: {{ order.fasteningType }}</span>
-            <span>Laminated: {{ order.isLaminated ? 'Yes' : 'No' }}</span>
-            <span>Completion Date: {{ order.completionDate | date }}</span>
-            <button mat-raised-button color="white" (click)="onCancelOrderRequest(order.id)" *ngIf="order.orderStatus?.name !== 'Canceled'">
-              cancel
-            </button>
-          </li>
-        </ul>
-      </div>
+      <mat-accordion *appShowIfNotEmpty="awaitingOrders; else noAwaitingOrders">
+        <mat-expansion-panel *ngFor="let order of awaitingOrders">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ order.bookName }}
+            </mat-panel-title>
+            <mat-panel-description>
+              Quantity: {{ order.quantity }}
+            </mat-panel-description>
+
+            <!-- Buttons in the header -->
+            <div class="header-actions">
+              <button mat-mini-fab color="white" aria-label="Edit Order" (click)="onEditOrderRequest(order)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-mini-fab color="white" aria-label="Cancel Order" (click)="onCancelOrderRequest(order.orderRequestId)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-expansion-panel-header>
+
+          <div class="details">
+            <p><strong>Author:</strong> {{ order.authorName }}</p>
+            <p><strong>Genre:</strong> {{ order.genre }}</p>
+            <p><strong>Published:</strong> {{ order.publicationYear }}</p>
+            <p><strong>Print Type:</strong> {{ order.printType }}</p>
+            <p><strong>Paper Type:</strong> {{ order.paperType }}</p>
+            <p><strong>Cover Type:</strong> {{ order.coverType }}</p>
+            <p><strong>Fastening Type:</strong> {{ order.fasteningType }}</p>
+            <p><strong>Laminated:</strong> {{ order.isLaminated ? 'Yes' : 'No' }}</p>
+            <p><strong>Completion Date:</strong> {{ order.completionDate | date }}</p>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
       <ng-template #noAwaitingOrders>
         <p>No orders awaiting confirmation.</p>
       </ng-template>
-    </section>    
+    </section>
+
+    <!-- All Orders -->
     <section>
       <h2>All Orders</h2>
-      <div *appShowIfNotEmpty="customerOrders; else noMyOrders">
-        <ul>
-          <li *ngFor="let order of customerOrders">
-            <strong>Order #: {{ order.number }}</strong>
+      <mat-accordion *appShowIfNotEmpty="customerOrders; else noCustomerOrders">
+        <mat-expansion-panel *ngFor="let order of customerOrders">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Order #: {{ order.number }}
+            </mat-panel-title>
+            <mat-panel-description>
+              Status: {{ order.orderStatus?.name }}
+            </mat-panel-description>
+
+            <!-- Buttons in the header -->
+            <div class="header-actions">
+              <button mat-mini-fab color="white" aria-label="Cancel Order" (click)="onCancelOrder(order.orderId)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </mat-expansion-panel-header>
+
+          <div class="details">
             <p><strong>Print Type:</strong> {{ order.printType }}</p>
             <p><strong>Paper Type:</strong> {{ order.paperType }}</p>
             <p><strong>Cover Type:</strong> {{ order.coverType }}</p>
@@ -46,18 +78,16 @@
             <p><strong>Completion Date:</strong> {{ order.completionDate | date }}</p>
             <p><strong>Customer:</strong> {{ order.customer?.name }}</p>
             <p><strong>Employee:</strong> {{ order.employee?.name }}</p>
-            <p><strong>Status:</strong> {{ order.orderStatus?.name }}</p>
-            <button mat-raised-button color="white" (click)="onCancelOrder(order.orderId)" *ngIf="order.orderStatus?.name !== 'Canceled'">
-              cancel
-            </button>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noMyOrders>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <ng-template #noCustomerOrders>
         <p>No orders found.</p>
       </ng-template>
-    </section>    
-    <button class="add-order" (click)="addOrder()">Order Print</button>
+    </section>
+
+    <button mat-raised-button color="white" class="add-order" (click)="addOrder()">Order Print</button>
   </div>
+
   <app-order-modal (orderAdded)="onOrderAdded()"></app-order-modal>
 </div>

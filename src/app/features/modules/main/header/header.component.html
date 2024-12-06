@@ -1,11 +1,15 @@
 <header>
-  <h1>Publishing House</h1>
-  <div class="user-info">
-    <span class="username">Welcome, {{ username }} <3</span>
+  <div class="left-part">
+    <div class="icons">
+      <div class="user-icon" appHighlight="lightcoral"></div>
+      <div class="settings-icon" appHighlight="lightgreen"></div>
+    </div>
+    <h1>Publishing House</h1>
   </div>
-  <button mat-raised-button color="white" class="button-18" (click)="logout()">logout</button>  
-  <div class="icons">
-    <div class="user-icon" appHighlight="lightcoral"></div>
-    <div class="settings-icon" appHighlight="lightgreen"></div>
-  </div>
+  <div class="right-part">
+    <div class="user-info">
+      <span class="username">Welcome, {{ username }} <3</span>
+    </div>
+    <button mat-raised-button color="white" class="button-18" (click)="logout()">logout</button> 
+  </div> 
 </header>

@@ -93,10 +93,10 @@
         <div class="form-group">
           <label for="printType">Print Type</label>
           <select id="printType" formControlName="printType">
-            <option value="Standard">Offset</option>
-            <option value="Premium">Digital</option>
-            <option value="Premium">Letterpress</option>
-            <option value="Premium">Screen Printing</option>
+            <option value="Offset">Offset</option>
+            <option value="Digital">Digital</option>
+            <option value="Letterpress">Letterpress</option>
+            <option value="Screen Printing">Screen Printing</option>
           </select>
           <small class="error" *ngIf="orderForm.controls['printType'].touched && orderForm.controls['printType'].invalid">
             Print type is required.
@@ -108,7 +108,7 @@
           <select id="paperType" formControlName="paperType">
             <option value="Glossy">Glossy</option>
             <option value="Matte">Matte</option>
-            <option value="Recycled">Coated</option>
+            <option value="Coated">Coated</option>
             <option value="Recycled">Recycled</option>
           </select>
           <small class="error" *ngIf="orderForm.controls['paperType'].touched && orderForm.controls['paperType'].invalid">
@@ -119,9 +119,9 @@
         <div class="form-group">
           <label for="coverType">Cover Type</label>
           <select id="coverType" formControlName="coverType">
-            <option value="Soft">Softcover</option>
-            <option value="Hard">Hardcover</option>
-            <option value="Hard">Flexible</option>
+            <option value="Softcover">Softcover</option>
+            <option value="Hardcover">Hardcover</option>
+            <option value="Flexible">Flexible</option>
           </select>
           <small class="error" *ngIf="orderForm.controls['coverType'].touched && orderForm.controls['coverType'].invalid">
             Cover type is required.
@@ -131,10 +131,10 @@
         <div class="form-group">
           <label for="fasteningType">Fastening Type</label>
           <select id="fasteningType" formControlName="fasteningType">
-            <option value="Stapled">Perfect</option>
-            <option value="Stapled">Saddle Stitching</option>
+            <option value="Perfect">Perfect</option>
+            <option value="Saddle Stitching">Saddle Stitching</option>
             <option value="Spiral">Spiral</option>
-            <option value="Bound">Case</option>
+            <option value="Case">Case</option>
           </select>
           <small class="error" *ngIf="orderForm.controls['fasteningType'].touched && orderForm.controls['fasteningType'].invalid">
             Fastening type is required.

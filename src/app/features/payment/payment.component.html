@@ -6,8 +6,8 @@
   <ng-container *ngIf="!isLoading && !errorMessage">
     <p class="total-amount">Total Amount: <span class="money">{{ totalAmount | currencyUAH }}</span></p>
 
-    <!-- Payment Form -->
     <form [formGroup]="paymentForm" (ngSubmit)="onSubmitPayment()" class="payment-form">
+      <!-- Card Number -->
       <div class="form-group">
         <label for="cardNumber">Card Number</label>
         <input
@@ -16,43 +16,58 @@
           formControlName="cardNumber"
           placeholder="1234 5678 9012 3456"
         />
-        <small *ngIf="paymentForm.controls['cardNumber'].touched && paymentForm.controls['cardNumber'].invalid" class="error">
+        <small
+          *ngIf="paymentForm.controls['cardNumber'].touched && paymentForm.controls['cardNumber'].invalid"
+          class="error"
+        >
+          <ng-container
+            *ngIf="paymentForm.controls['cardNumber'].errors?.['invalidCardNumber']"
+          >
+            Invalid card number.
+          </ng-container>
           <ng-container *ngIf="paymentForm.controls['cardNumber'].errors?.['required']">
             Card number is required.
           </ng-container>
-          <ng-container *ngIf="paymentForm.controls['cardNumber'].errors?.['pattern']">
-            Invalid card number format.
-          </ng-container>
         </small>
       </div>
 
+      <!-- Expiry Date -->
       <div class="form-group">
         <label for="expiryDate">Expiry Date</label>
         <input id="expiryDate" type="text" formControlName="expiryDate" placeholder="MM/YY" />
-        <small *ngIf="paymentForm.controls['expiryDate'].touched && paymentForm.controls['expiryDate'].invalid" class="error">
+        <small
+          *ngIf="paymentForm.controls['expiryDate'].touched && paymentForm.controls['expiryDate'].invalid"
+          class="error"
+        >
+          <ng-container
+            *ngIf="paymentForm.controls['expiryDate'].errors?.['invalidExpiryDate']"
+          >
+            Invalid expiry date format (MM/YY).
+          </ng-container>
           <ng-container *ngIf="paymentForm.controls['expiryDate'].errors?.['required']">
             Expiry date is required.
           </ng-container>
-          <ng-container *ngIf="paymentForm.controls['expiryDate'].errors?.['pattern']">
-            Invalid expiry date format (MM/YY).
-          </ng-container>
         </small>
       </div>
 
+      <!-- CVV -->
       <div class="form-group">
         <label for="cvv">CVV</label>
         <input id="cvv" type="text" formControlName="cvv" placeholder="123" />
-        <small *ngIf="paymentForm.controls['cvv'].touched && paymentForm.controls['cvv'].invalid" class="error">
+        <small
+          *ngIf="paymentForm.controls['cvv'].touched && paymentForm.controls['cvv'].invalid"
+          class="error"
+        >
+          <ng-container *ngIf="paymentForm.controls['cvv'].errors?.['invalidCVV']">
+            CVV must be a 3-digit number.
+          </ng-container>
           <ng-container *ngIf="paymentForm.controls['cvv'].errors?.['required']">
             CVV is required.
-          </ng-container>
-          <ng-container *ngIf="paymentForm.controls['cvv'].errors?.['pattern']">
-            CVV must be a 3-digit number.
           </ng-container>
         </small>
       </div>
 
-      <button mat-raised-button color="white" type="submit" [disabled]="paymentForm.invalid || totalAmount <= 0">
+      <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid || totalAmount <= 0">
         Pay Now
       </button>
     </form>

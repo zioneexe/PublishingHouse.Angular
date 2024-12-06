@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, switchMap, throwError } from 'rxjs';
 import { PrintOrder } from '../models/PrintOrder';
 import { environment } from '../../../environments/environment.development';
 import { PrintOrderResponse } from '../models/PrintOrderResponse';
+import { PrintOrderUpdateRequest } from '../models/PrintOrderUpdateRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,12 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  createOrder(orderData: any): Observable<PrintOrder> {
-    return this.http.post<PrintOrder>(this.url, orderData);
+  createOrder(orderData: any): Observable<void> {
+    return this.http.post<void>(this.url, orderData);
+  }
+
+  createOrderWithId(orderData: any): Observable<any> {
+    return this.http.post<number>(`${this.url}/order-id`, orderData);
   }
 
   getOrders(): Observable<PrintOrder[]> {
@@ -31,8 +36,14 @@ export class OrderService {
 
   updateOrder(
     orderId: number,
-    updatedOrder: Partial<PrintOrder>
+    updatedOrder: Partial<PrintOrderUpdateRequest>
   ): Observable<PrintOrder> {
+
+    if (!updatedOrder.customerId || !updatedOrder.employeeId) {
+      console.error('Invalid customerId or employeeId in the update request.');
+      return throwError(() => new Error('Invalid update payload.'));
+    }
+
     return this.http.put<PrintOrder>(`${this.url}/${orderId}`, updatedOrder);
   }
 

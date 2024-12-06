@@ -22,10 +22,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.log(error);
         if (error.status === 401) {
           this.snackBar.open('Session expired. Please log in again.', 'Close', { duration: 3000 });
           localStorage.clear();
           this.router.navigate(['/login']);
+        }
+
+        if (error.status === 403) {
+          this.snackBar.open(
+            'You do not have permission to perform this action.',
+            'Close',
+            { duration: 3000 }
+          );
         }
 
         if (error.status === 500) {

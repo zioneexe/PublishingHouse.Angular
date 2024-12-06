@@ -1,0 +1,25 @@
+.success-page {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 600px;
+
+  h1 {
+    color: #4caf50;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px 0;
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}

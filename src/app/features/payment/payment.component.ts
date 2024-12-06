@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { PaymentRequest } from '../../core/models/PaymentRequest';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -12,6 +13,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { PaymentValidationService } from '../../core/services/payment-validation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -34,12 +36,19 @@ export class PaymentComponent implements OnInit {
     private paymentService: PaymentService,
     private authService: AuthService,
     private paymentValidationService: PaymentValidationService,
+    private router: Router,
     private fb: FormBuilder
   ) {
     this.paymentForm = this.fb.group({
-      cardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
-      expiryDate: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
+      cardNumber: [
+        '',
+        [Validators.required, this.cardNumberValidator.bind(this)],
+      ],
+      expiryDate: [
+        '',
+        [Validators.required, this.expiryDateValidator.bind(this)],
+      ],
+      cvv: ['', [Validators.required, this.cvvValidator.bind(this)]],
     });
   }
 
@@ -76,21 +85,6 @@ export class PaymentComponent implements OnInit {
 
     const { cardNumber, expiryDate, cvv } = this.paymentForm.value;
 
-    if (!this.paymentValidationService.validateCardNumber(cardNumber)) {
-      this.errorMessage = 'Invalid card number.';
-      return;
-    }
-
-    if (!this.paymentValidationService.validateExpiryDate(expiryDate)) {
-      this.errorMessage = 'Invalid expiry date.';
-      return;
-    }
-
-    if (!this.paymentValidationService.validateCVV(cvv)) {
-      this.errorMessage = 'Invalid CVV.';
-      return;
-    }
-
     const paymentDetails: PaymentRequest = {
       amount: this.totalAmount,
       cardNumber,
@@ -98,14 +92,58 @@ export class PaymentComponent implements OnInit {
       cvv,
     }
 
+    console.log(paymentDetails);
+
     this.paymentService.initiatePayment(paymentDetails).subscribe({
       next: (paymentResponse) => {
-        window.location.href = paymentResponse.url;
+        console.log(paymentResponse);
+
+        if (paymentResponse.result === 'ok') {
+          this.handlePaymentSuccess(paymentResponse);
+        } else {
+          this.handlePaymentError(paymentResponse);
+        }
       },
       error: (err) => {
         this.errorMessage = 'Failed to initiate payment. Please try again.';
         console.error('Error initiating payment:', err);
       },
     });
+  }
+
+  private handlePaymentSuccess(paymentResponse: any): void {
+    this.errorMessage = null; 
+    alert('Payment successful!'); 
+    console.log('Payment was successful:', paymentResponse);
+    
+    this.router.navigate(['/payment-success'], {
+      queryParams: { transactionId: paymentResponse.transaction_id },
+    });
+  }
+  
+  private handlePaymentError(paymentResponse: any): void {
+    this.errorMessage = 'Payment failed. Please try again. [' + paymentResponse.err_description + ']';
+    console.error('Payment error details:', paymentResponse);
+  }
+
+  cardNumberValidator(control: AbstractControl) {
+    if (!this.paymentValidationService.validateCardNumber(control.value)) {
+      return { invalidCardNumber: true };
+    }
+    return null;
+  }
+
+  expiryDateValidator(control: AbstractControl) {
+    if (!this.paymentValidationService.validateExpiryDate(control.value)) {
+      return { invalidExpiryDate: true };
+    }
+    return null;
+  }
+
+  cvvValidator(control: AbstractControl) {
+    if (!this.paymentValidationService.validateCVV(control.value)) {
+      return { invalidCVV: true };
+    }
+    return null;
   }
 }

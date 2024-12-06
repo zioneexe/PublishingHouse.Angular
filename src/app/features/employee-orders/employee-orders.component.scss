@@ -129,3 +129,13 @@
   max-width: 200px;
   min-width: 180px;
 }
+
+.table-container {
+  height: calc(100vh - 400px); 
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
+
+mat-table {
+  width: 100%; 
+}

@@ -30,3 +30,22 @@ header .icons {
 .username {
   color: white;
 }
+
+.left-part {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.right-part {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+}
+
+.user-info {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+}

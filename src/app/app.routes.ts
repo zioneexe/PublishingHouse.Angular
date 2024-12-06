@@ -5,6 +5,7 @@ import { PageNotFoundComponent } from './features/page-not-found/page-not-found.
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { BookDetailsComponent } from './features/book-details/book-details.component';
+import { PaymentSuccessComponent } from './features/payment-success/payment-success.component';
 
 export const routes: Routes = [
   {
@@ -20,13 +21,17 @@ export const routes: Routes = [
   {
     path: 'unauthorized',
     loadComponent: () =>
-      import('./features/unauthorized/unauthorized.component').then((m) => m.UnauthorizedComponent),
+      import('./features/unauthorized/unauthorized.component').then(
+        (m) => m.UnauthorizedComponent
+      ),
     title: 'Unauthorized - pH',
   },
   {
     path: 'payment',
     loadComponent: () =>
-      import('./features/payment/payment.component').then((m) => m.PaymentComponent),
+      import('./features/payment/payment.component').then(
+        (m) => m.PaymentComponent
+      ),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Customer'] },
     title: 'Payment - pH',
@@ -34,7 +39,9 @@ export const routes: Routes = [
   {
     path: 'customer-orders',
     loadComponent: () =>
-      import('./features/customer-orders/customer-orders.component').then((m) => m.CustomerOrdersComponent),
+      import('./features/customer-orders/customer-orders.component').then(
+        (m) => m.CustomerOrdersComponent
+      ),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Customer'] },
     title: 'Your orders - pH',
@@ -42,7 +49,9 @@ export const routes: Routes = [
   {
     path: 'employee-orders',
     loadComponent: () =>
-      import('./features/employee-orders/employee-orders.component').then((m) => m.EmployeeOrdersComponent),
+      import('./features/employee-orders/employee-orders.component').then(
+        (m) => m.EmployeeOrdersComponent
+      ),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Employee', 'Admin'] },
     title: '[Employee] Orders - pH',
@@ -50,12 +59,28 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () =>
-      import('./features/admin-orders/admin-orders.component').then((m) => m.AdminOrdersComponent),
+      import('./features/admin-orders/admin-orders.component').then(
+        (m) => m.AdminOrdersComponent
+      ),
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['Admin'] },
     title: '[Admin] Dashboard - pH',
   },
-  { path: 'books/view/:id', component: BookDetailsComponent },
+  {
+    path: 'books/view/:id',
+    component: BookDetailsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'payment-success',
+    component: PaymentSuccessComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin', 'Customer'] },
+  },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent, title: '404 - Page Not Found' },
+  {
+    path: '**',
+    component: PageNotFoundComponent,
+    title: '404 - Page Not Found',
+  },
 ];

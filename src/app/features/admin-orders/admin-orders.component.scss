@@ -7,7 +7,7 @@ body {
   color: #333;
 }
 
-.customer-orders {
+.admin-orders {
   width: 95vw;
 }
 
@@ -133,4 +133,15 @@ pp-order-card .actions button:active {
 
 .pay-btn:hover {
   background-color: #45a049;
+}
+
+
+.table-container {
+  height: calc(100vh - 400px); 
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
+
+mat-table {
+  width: 100%; 
 }

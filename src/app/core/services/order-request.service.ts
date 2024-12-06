@@ -31,6 +31,14 @@ export class OrderRequestService {
     return this.http.post<any>(this.baseUrl, orderRequest);
   }
 
+  updateOrderRequest(orderRequestId: number, orderRequest: OrderRequest): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${orderRequestId}`, orderRequest);
+  }  
+
+  calculatePrice(orderRequest: OrderRequest): Observable<number> {
+    return this.http.post<number>(`${this.baseUrl}/calculate-price`, orderRequest);
+  }
+
   deleteOrderRequest(orderRequestId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${orderRequestId}`);
   }

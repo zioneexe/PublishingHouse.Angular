@@ -7,6 +7,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-edit-order',
@@ -21,6 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatDatepickerModule,
     MatIconModule,
     ReactiveFormsModule,
+    MatOptionModule,
+    MatSelectModule
   ]
 })
 export class EditOrderComponent {
@@ -32,17 +36,15 @@ export class EditOrderComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.orderForm = this.fb.group({
-      orderNumber: [data.orderNumber, Validators.required],
-      printType: [data.printType, Validators.required],
-      paperType: [data.paperType, Validators.required],
-      coverType: [data.coverType, Validators.required],
-      fasteningType: [data.fasteningType, Validators.required],
+      printType: [data?.printType || '', Validators.required],
+      paperType: [data?.paperType || '', Validators.required],
+      coverType: [data?.coverType || '', Validators.required],
+      fasteningType: [data?.fasteningType, Validators.required],
       isLaminated: [data.isLaminated],
-      completionDate: [data.completionDate, Validators.required],
-      price: [data.price, [Validators.required, Validators.min(0)]],
+      completionDate: [data.completionDate],
     });
 
-    console.log('Dialog data:', data);
+    console.log(data);
   }
 
   onSave(): void {

@@ -1,29 +1,223 @@
 <div class="admin-orders">
-  <div class="container">
-    <h1>All Orders</h1>
-    <section>
-      <div *ngIf="allOrders.length > 0; else noOrders">
-        <ul>
-          <li *ngFor="let order of allOrders">
-            <strong>{{ order.bookName }}</strong>
-            <span>Author: {{ order.authorName }}</span>
-            <span>Genre: {{ order.genre }}</span>
-            <span>Published: {{ order.publicationYear }}</span>
-            <span>Quantity: {{ order.quantity }}</span>
-            <span>Print Type: {{ order.printType }}</span>
-            <span>Paper Type: {{ order.paperType }}</span>
-            <span>Cover Type: {{ order.coverType }}</span>
-            <span>Fastening Type: {{ order.fasteningType }}</span>
-            <span>Laminated: {{ order.isLaminated ? 'Yes' : 'No' }}</span>
-            <span>Completion Date: {{ order.completionDate | date }}</span>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noOrders>
-        <p>No orders found.</p>
-      </ng-template>
-    </section>
-    <button class="add-order" (click)="addOrder()">Add New Order</button>
+  <div class="container mat-elevation-z8">
+    <mat-tab-group>
+      <!-- Order Requests Tab -->
+      <mat-tab label="Order Requests">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Search..</mat-label>
+            <input matInput (keyup)="applyFilter(dataSource1, $event)" placeholder="Filter">
+          </mat-form-field>
+          
+          <div class="table-container">
+            <mat-table [dataSource]="dataSource1" matSort #sort1="matSort">
+              <!-- Customer Name Column -->
+              <ng-container matColumnDef="customerName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Customer</mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.customer?.name }} </mat-cell>
+              </ng-container>
+
+              <!-- Book Name Column -->
+              <ng-container matColumnDef="bookName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Book </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.bookName }} </mat-cell>
+              </ng-container>
+
+              <!-- Quantity Column -->
+              <ng-container matColumnDef="quantity">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.quantity }} </mat-cell>
+              </ng-container>
+
+              <!-- Author Name Column -->
+              <ng-container matColumnDef="authorName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Author </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.authorName }} </mat-cell>
+              </ng-container>
+
+              <!-- Genre Column -->
+              <ng-container matColumnDef="genre">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Genre </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.genre }} </mat-cell>
+              </ng-container>
+
+              <!-- Published Year Column -->
+              <ng-container matColumnDef="publicationYear">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Published Year </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.publicationYear }} </mat-cell>
+              </ng-container>
+
+              <!-- Print Type Column -->
+              <ng-container matColumnDef="printType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Print Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.printType }} </mat-cell>
+              </ng-container>
+
+              <!-- Paper Type Column -->
+              <ng-container matColumnDef="paperType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Paper Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.paperType }} </mat-cell>
+              </ng-container>
+
+              <!-- Cover Type Column -->
+              <ng-container matColumnDef="coverType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Cover Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.coverType }} </mat-cell>
+              </ng-container>
+
+              <!-- Fastening Type Column -->
+              <ng-container matColumnDef="fasteningType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Fastening Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.fasteningType }} </mat-cell>
+              </ng-container>
+
+              <!-- Laminated Column -->
+              <ng-container matColumnDef="isLaminated">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Laminated </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.isLaminated ? 'Yes' : 'No' }} </mat-cell>
+              </ng-container>
+
+              <!-- Completion Date Column -->
+              <ng-container matColumnDef="completionDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Completion Date </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.completionDate | date }} </mat-cell>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let order">
+                  <button mat-mini-fab color="primary" (click)="onAccept(order)">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" (click)="onReject(order)">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>            
+
+              <mat-header-row *matHeaderRowDef="orderRequestColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: orderRequestColumns;"></mat-row>
+            </mat-table>
+          </div>  
+
+          <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+        </div>
+      </mat-tab>
+
+      <!-- Orders Tab -->
+      <mat-tab label="Orders">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Search..</mat-label>
+            <input matInput (keyup)="applyFilter(dataSource2, $event)" placeholder="Filter">
+          </mat-form-field>
+
+          <div class="table-container">
+            <mat-table [dataSource]="dataSource2" matSort #sort2="matSort">
+              <!-- Order Number Column -->
+              <ng-container matColumnDef="orderNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Order Number </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.number }} </mat-cell>
+              </ng-container>
+
+              <!-- Print Type Column -->
+              <ng-container matColumnDef="printType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Print Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.printType }} </mat-cell>
+              </ng-container>
+
+              <!-- Paper Type Column -->
+              <ng-container matColumnDef="paperType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Paper Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.paperType }} </mat-cell>
+              </ng-container>
+
+              <!-- Cover Type Column -->
+              <ng-container matColumnDef="coverType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Cover Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.coverType }} </mat-cell>
+              </ng-container>
+
+              <!-- Fastening Type Column -->
+              <ng-container matColumnDef="fasteningType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Fastening Type </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.fasteningType }} </mat-cell>
+              </ng-container>
+
+              <!-- Is Laminated Column -->
+              <ng-container matColumnDef="isLaminated">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Lamination </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.isLaminated ? 'Yes' : 'No' }} </mat-cell>
+              </ng-container>
+
+              <!-- Registration Date Column -->
+              <ng-container matColumnDef="registrationDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Registration Date </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.registrationDate | date }} </mat-cell>
+              </ng-container>
+
+              <!-- Completion Date Column -->
+              <ng-container matColumnDef="completionDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Completion Date </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.completionDate ? (order.completionDate | date) : 'N/A' }} </mat-cell>
+              </ng-container>
+
+              <!-- Execution Days Column -->
+              <ng-container matColumnDef="executionDays">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Execution Days </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.executionDays !== null ? order.executionDays : 'N/A' }} </mat-cell>
+              </ng-container>
+
+              <!-- Customer Name Column -->
+              <ng-container matColumnDef="customerName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.customer.name }} </mat-cell>
+              </ng-container>
+
+              <!-- Price Column -->
+              <ng-container matColumnDef="price">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+                <mat-cell *matCellDef="let order"> {{ order.price | currencyUAH }} </mat-cell>
+              </ng-container>
+
+              <!-- Order Status Column -->
+              <ng-container matColumnDef="orderStatus">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Order Status </mat-header-cell>
+                <mat-cell *matCellDef="let order">
+                  <mat-form-field appearance="fill" >
+                    <mat-select panelWidth
+                      [value]="order.orderStatus.orderStatusId"
+                      (selectionChange)="onStatusChange(order, $event.value)"
+                    >
+                      <mat-option *ngFor="let status of orderStatuses" [value]="status.orderStatusId">
+                        {{ status.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let order">
+                  <button mat-mini-fab color="primary" class="action-button" (click)="onEdit(order)">
+                    <mat-icon fontIcon="edit_square"></mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" class="action-button" (click)="onDelete(order)">
+                    <mat-icon fontIcon="delete"></mat-icon>
+                  </button>
+                </mat-cell>      
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="allOrdersColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: allOrdersColumns;"></mat-row>
+            </mat-table>
+        </div>
+
+          <mat-paginator #paginator2 [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-  <app-order-modal (orderAdded)="onOrderAdded()"></app-order-modal>
 </div>
