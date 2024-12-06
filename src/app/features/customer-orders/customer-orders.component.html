@@ -68,16 +68,36 @@
           </mat-expansion-panel-header>
 
           <div class="details">
-            <p><strong>Print Type:</strong> {{ order.printType }}</p>
-            <p><strong>Paper Type:</strong> {{ order.paperType }}</p>
-            <p><strong>Cover Type:</strong> {{ order.coverType }}</p>
-            <p><strong>Fastening Type:</strong> {{ order.fasteningType }}</p>
-            <p><strong>Laminated:</strong> {{ order.isLaminated ? 'Yes' : 'No' }}</p>
-            <p><strong>Price:</strong> {{ order.price | currencyUAH }}</p>
-            <p><strong>Registration Date:</strong> {{ order.registrationDate | date }}</p>
-            <p><strong>Completion Date:</strong> {{ order.completionDate | date }}</p>
-            <p><strong>Customer:</strong> {{ order.customer?.name }}</p>
-            <p><strong>Employee:</strong> {{ order.employee?.name }}</p>
+            <div class="request-details">
+              <p><strong>Print Type:</strong> {{ order.printType }}</p>
+              <p><strong>Paper Type:</strong> {{ order.paperType }}</p>
+              <p><strong>Cover Type:</strong> {{ order.coverType }}</p>
+              <p><strong>Fastening Type:</strong> {{ order.fasteningType }}</p>
+              <p><strong>Laminated:</strong> {{ order.isLaminated ? 'Yes' : 'No' }}</p>
+              <p><strong>Price:</strong> {{ order.price | currencyUAH }}</p>
+              <p><strong>Registration Date:</strong> {{ order.registrationDate | date }}</p>
+              <p><strong>Completion Date:</strong> {{ order.completionDate | date }}</p>
+              <p><strong>Customer:</strong> {{ order.customer?.name }}</p>
+              <p><strong>Employee:</strong> {{ order.employee?.name }}</p>
+            </div>
+          
+            <div *ngIf="order.orderBooks.length > 0" class="book-details">
+              <h3>Books in this Order:</h3>
+              <div class="books">
+                <div *ngFor="let orderBook of order.orderBooks" class="book-item">
+                  <a [routerLink]="['/books/view', orderBook?.book?.bookId]" class="book-link">
+                    <img [src]="orderBook?.book?.coverImagePath" alt="Cover" class="book-cover" />
+                    <div class="book-description">
+                      <p class="book-title">{{ orderBook?.book?.name }}</p>
+                      <p class="book-author"><strong>Author: </strong>{{ orderBook?.book?.author }}</p>
+                      <p class="book-genre"><strong>Genre: </strong>{{ orderBook?.book?.genre }}</p>
+                      <p class="book-pages"><strong>Pages: </strong>{{ orderBook?.book?.pages }}</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>            
+          
           </div>
         </mat-expansion-panel>
       </mat-accordion>

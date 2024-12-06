@@ -15,9 +15,11 @@ import { CurrencyUAHPipe } from '../../core/pipes/currency-uah.pipe';
 import { OrderBookService } from '../../core/services/order-book.service';
 import { OrderRequestModalComponent } from '../order-request-modal/order-request-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { environment } from '../../../environments/environment.development';
 
 interface ExpandableOrder extends PrintOrderResponse {
   isExpanded: boolean;
+  orderBooks: any[]
 }
 
 @Component({
@@ -40,7 +42,8 @@ export class CustomerOrdersComponent implements OnInit {
 
   awaitingOrders: any[] = [];
   customerOrders: ExpandableOrder[] = [];
-  orderBooks: any[] = [];
+
+  placeholderImage: string = 'assets/sample_book.jpg'; 
 
   constructor(
     private orderRequestService: OrderRequestService,
@@ -54,7 +57,6 @@ export class CustomerOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.loadAwaitingOrders();
     this.loadCustomerOrders();
-    this.loadBooksByOrder(1);
   }
 
   loadAwaitingOrders(): void {
@@ -64,7 +66,6 @@ export class CustomerOrdersComponent implements OnInit {
       this.orderRequestService.getByCustomerId(customerId).subscribe({
         next: (orders) => {
           this.awaitingOrders = orders.map((order) => ({ ...order, isExpanded: false }));
-          console.log(orders);
         },
         error: (err) => {
           console.error('Error fetching awaiting orders:', err);
@@ -81,8 +82,11 @@ export class CustomerOrdersComponent implements OnInit {
     if (customerId) {
       this.orderService.getOrdersByCustomerId(customerId).subscribe({
         next: (orders) => {
-          this.customerOrders = orders.map((order) => ({ ...order, isExpanded: false }));
-          console.log(orders);
+          this.customerOrders = orders.map((order) => ({ ...order, isExpanded: false, orderBooks: [] }));
+
+          this.customerOrders.forEach((order) => {
+            this.loadBooksByOrder(order.orderId);
+          });
         },
         error: (err) => {
           console.error('Error fetching customer orders:', err);
@@ -96,8 +100,18 @@ export class CustomerOrdersComponent implements OnInit {
   loadBooksByOrder(orderId: number): void {
     this.orderBookService.getBooksByOrderId(orderId).subscribe({
       next: (books) => {
-        this.orderBooks = books;
-        console.log(`Books for order #${orderId}:`, books);
+        const order = this.customerOrders.find((order) => order.orderId === orderId);
+        if (order) {
+          order.orderBooks = books.map((book) => ({
+            ...book,
+            book: {
+              ...book.book,
+              coverImagePath: book.book.coverImagePath
+                ? `${environment.baseApiUrl}${book.book.coverImagePath}`
+                : this.placeholderImage,
+            },
+          }));
+        }
       },
       error: (err) => {
         console.error(`Error fetching books for order #${orderId}:`, err);
@@ -161,6 +175,7 @@ export class CustomerOrdersComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        console.log(result);
         this.loadAwaitingOrders(); 
       }
     });
