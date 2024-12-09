@@ -47,7 +47,7 @@ export class AuthInterceptor implements HttpInterceptor {
             'Retry',
             { duration: 5000 }
           ).onAction().subscribe(() => {
-            location.reload();
+            //location.reload();
           });
         }
 

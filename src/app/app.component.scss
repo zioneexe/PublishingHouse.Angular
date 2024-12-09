@@ -1,12 +1,21 @@
+
+@mixin box-shadow($x: 0, $y: 4px, $blur: 8px, $spread: 0, $color: rgba(0, 0, 0, 0.1)) {
+  box-shadow: $x $y $blur $spread $color, $x $y 20px $spread $color;
+}
+
+@mixin center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .main-content {
   padding: 64px 20px;
   min-height: calc(100vh - 50px); 
   height: 100vh;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: aliceblue;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); 
+  @include center-content();
+  @include box-shadow();
 }

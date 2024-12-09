@@ -90,7 +90,7 @@ export class PaymentComponent implements OnInit {
       cardNumber,
       expiryDate,
       cvv,
-    }
+    };
 
     console.log(paymentDetails);
 
@@ -112,17 +112,19 @@ export class PaymentComponent implements OnInit {
   }
 
   private handlePaymentSuccess(paymentResponse: any): void {
-    this.errorMessage = null; 
-    alert('Payment successful!'); 
+    this.errorMessage = null;
     console.log('Payment was successful:', paymentResponse);
-    
+
     this.router.navigate(['/payment-success'], {
       queryParams: { transactionId: paymentResponse.transaction_id },
     });
   }
-  
+
   private handlePaymentError(paymentResponse: any): void {
-    this.errorMessage = 'Payment failed. Please try again. [' + paymentResponse.err_description + ']';
+    this.errorMessage =
+      'Payment failed. Please try again. [' +
+      paymentResponse.err_description +
+      ']';
     console.error('Payment error details:', paymentResponse);
   }
 
